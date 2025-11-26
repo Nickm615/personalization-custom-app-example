@@ -6,14 +6,16 @@ import "./App.css";
 const App = () => {
   const context = useAppContext();
   const [popupSizeStatus, setPopupSizeStatus] = useState<string>("");
+  const [width, setWidth] = useState<number>(800);
+  const [height, setHeight] = useState<number>(600);
 
   const handleResizePopup = async () => {
-    const response = await setPopupSize({ unit: "px", value: 800 }, { unit: "px", value: 600 });
+    const response = await setPopupSize({ unit: "px", value: width }, { unit: "px", value: height });
 
     if (response.isError) {
       setPopupSizeStatus(`Error: ${response.code} - ${response.description}`);
     } else {
-      setPopupSizeStatus("Popup resized to 800x600 pixels");
+      setPopupSizeStatus(`Popup resized to ${width}x${height} pixels`);
     }
 
     setTimeout(() => setPopupSizeStatus(""), 3000);
@@ -35,8 +37,30 @@ const App = () => {
       <section className="section">
         <h2>Adjust Popup Size</h2>
         <p className="description">
-          Resize the custom app popup to 800x600 pixels using <code>setPopupSize</code>.
+          Resize the custom app popup using <code>setPopupSize</code>.
         </p>
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center", marginBottom: "1rem" }}>
+          <label>
+            Width (px):
+            <input
+              type="number"
+              value={width}
+              onChange={(e) => setWidth(Number(e.target.value))}
+              min="100"
+              style={{ marginLeft: "0.5rem", padding: "0.5rem", width: "100px" }}
+            />
+          </label>
+          <label>
+            Height (px):
+            <input
+              type="number"
+              value={height}
+              onChange={(e) => setHeight(Number(e.target.value))}
+              min="100"
+              style={{ marginLeft: "0.5rem", padding: "0.5rem", width: "100px" }}
+            />
+          </label>
+        </div>
         <button type="button" onClick={() => void handleResizePopup()} className="button">
           Resize Popup
         </button>
