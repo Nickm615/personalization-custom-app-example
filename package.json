@@ -10,7 +10,8 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "biome:fix": "biome check --write .",
-    "biome:check": "biome check ."
+    "biome:check": "biome check .",
+    "biome:ci": "biome ci ."
   },
   "dependencies": {
     "@kontent-ai/custom-app-sdk": "^2.1.0",
