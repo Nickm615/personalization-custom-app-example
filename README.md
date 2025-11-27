@@ -2,35 +2,17 @@
 
 A React + TypeScript starter template for building [Kontent.ai custom apps](https://kontent.ai/learn/docs/build-apps/custom-apps/overview). This template provides a quick setup with all the essentials to start developing your custom app.
 
-## Features
-
-- ✅ React 18 with TypeScript
-- ✅ Vite for fast development and builds
-- ✅ HTTPS enabled for local development (self-signed certificate)
-- ✅ @kontent-ai/custom-app-sdk integration
-- ✅ Custom hook for observing context changes
-- ✅ Example implementations of all SDK functions
-- ✅ Kontent.ai ESLint & Biome configurations
-- ✅ Minimal, clean styling
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and pnpm (or npm)
+- Node.js lts and pnpm
 
 ### Installation
 
-Using pnpm (recommended):
-
 ```bash
 pnpm i
-```
-
-Using npm:
-
-```bash
-npm i
 ```
 
 ### Development
@@ -39,8 +21,6 @@ Start the development server:
 
 ```bash
 pnpm dev
-# or
-npm run dev
 ```
 
 The app will be available at `https://localhost:5173`. The dev server uses a self-signed certificate for HTTPS, which is required for custom apps. Your browser will show a security warning on first access - this is expected for local development.
@@ -51,40 +31,34 @@ Build for production:
 
 ```bash
 pnpm build
-# or
-npm run build
 ```
 
 Preview the production build:
 
 ```bash
 pnpm preview
-# or
-npm run preview
-```
-
-## Project Structure
-
-```
-src/
-├── hooks/
-│   └── useCustomAppContext.ts  # Custom hook for observing context
-├── App.tsx                      # Main application component
-├── App.css                      # Application styles
-├── main.tsx                     # Application entry point
-└── index.css                    # Global styles
 ```
 
 ## SDK Usage
 
 ### Observing Context Changes
 
-The `useCustomAppContext` hook automatically subscribes to context changes:
+The `useAppContext` hook automatically subscribes to context changes:
 
 ```typescript
-import { useCustomAppContext } from './hooks/useCustomAppContext';
+import { useAppContext } from './contexts/AppContext';
 
-const { context, isLoading, error } = useCustomAppContext();
+const context = useAppContext();
+```
+
+### Accessing App Configuration
+
+The `useAppConfig` hook returns the parsed app configuration:
+
+```typescript
+import { useAppConfig } from './contexts/AppContext';
+
+const config = useAppConfig();
 ```
 
 ### Single Context Fetch
@@ -130,11 +104,7 @@ await setPopupSize(
 ## Learn More
 
 - [Kontent.ai Custom Apps Documentation](https://kontent.ai/learn/docs/build-apps/custom-apps/overview)
-- [Custom App SDK Reference](https://github.com/kontent-ai/custom-app-sdk-js)
-- [Kontent.ai ESLint Config](https://github.com/kontent-ai/eslint-config)
-- [Kontent.ai Biome Config](https://github.com/kontent-ai/biome-config)
-- [Vite Documentation](https://vite.dev/)
-- [React Documentation](https://react.dev/)
+- [Kontent.ai Custom App SDK](https://github.com/kontent-ai/custom-app-sdk-js)
 
 ## License
 
