@@ -72,6 +72,29 @@ if (!response.isError) {
 }
 ```
 
+### Restricting Supported Contexts
+
+By default, the app supports all page contexts (Item Editor, Content Inventory, and Other). To restrict your app to specific contexts, edit the `createAppContext` call in `src/contexts/AppContext.tsx`:
+
+```typescript
+// Only allow Item Editor context
+export const { AppContextProvider, useAppContext, useAppConfig } = createAppContext([
+  "itemEditor",
+] as const);
+
+// Allow Item Editor and Content Inventory
+export const { AppContextProvider, useAppContext, useAppConfig } = createAppContext([
+  "itemEditor",
+  "contentInventory",
+] as const);
+```
+
+When a restricted context is configured:
+- If the app is opened in an unsupported context, a friendly error page is displayed
+- TypeScript narrows the return type of `useAppContext()` based on the allowed contexts
+
+For example, with `["itemEditor"]`, the `useAppContext()` hook returns `CustomAppItemEditorContext` with guaranteed access to `contentItemId` and `validationErrors` properties.
+
 ### Adjusting Popup Size
 
 Control the size of your custom app when displayed in a popup:
