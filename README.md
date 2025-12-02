@@ -74,7 +74,7 @@ if (!response.isError) {
 
 ### Restricting Supported Contexts
 
-By default, the app supports all page contexts (Item Editor, Content Inventory, and Other). To restrict your app to specific contexts, edit the `createAppContext` call in `src/contexts/AppContext.tsx`:
+By default, the app supports all page contexts (Item Editor, Content Inventory, and Other). To restrict your app to specific contexts, edit the `createAppContext` call in [`src/contexts/AppContext.tsx`](./src/contexts/AppContext.tsx):
 
 ```typescript
 // Only allow Item Editor context
