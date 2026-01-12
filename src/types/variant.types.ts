@@ -23,3 +23,10 @@ export interface UseCurrentItemResult {
   readonly error: string | null;
   readonly refetch: () => Promise<void>;
 }
+
+export interface VariantInfo {
+  readonly id: string;
+  readonly name: string;
+  readonly audienceTermId: string | null;
+  readonly isBaseContent: boolean;
+}

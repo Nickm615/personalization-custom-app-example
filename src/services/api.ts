@@ -2,6 +2,7 @@ import type {
   ContentItemModels,
   ContentTypeModels,
   ContentTypeSnippetModels,
+  LanguageModels,
   LanguageVariantModels,
   TaxonomyModels,
 } from "@kontent-ai/management-sdk";
@@ -67,3 +68,9 @@ export const fetchTaxonomy = async (
   codename: string
 ): Promise<ApiResponse<TaxonomyModels.Taxonomy>> =>
   callFunction("fetch-taxonomy", { environmentId, codename });
+
+export const fetchLanguage = async (
+  environmentId: string,
+  languageId: string
+): Promise<ApiResponse<LanguageModels.LanguageModel>> =>
+  callFunction("fetch-language", { environmentId, languageId });

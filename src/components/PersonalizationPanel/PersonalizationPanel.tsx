@@ -1,5 +1,9 @@
+import { useAudienceTaxonomy } from "../../hooks/useAudienceTaxonomy";
 import { useCurrentItem } from "../../hooks/useCurrentItem";
+import { useExistingVariants } from "../../hooks/useExistingVariants";
+import { useLanguage } from "../../hooks/useLanguage";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
+import { VariantList } from "../VariantList/VariantList";
 import styles from "./PersonalizationPanel.module.css";
 
 interface PersonalizationPanelProps {
@@ -51,15 +55,6 @@ const NoSnippetState = () => (
   </div>
 );
 
-const VariantNotice = () => (
-  <div className={styles.variantNotice}>
-    <p className={styles.variantNoticeText}>
-      This item is a personalization variant. To manage variants, please open
-      the base content item.
-    </p>
-  </div>
-);
-
 export const PersonalizationPanel = ({
   environmentId,
   itemId,
@@ -68,6 +63,20 @@ export const PersonalizationPanel = ({
   const { data, loadingState, error } = useCurrentItem(
     environmentId,
     itemId,
+    languageId
+  );
+
+  const { termMap: audienceTermMap } = useAudienceTaxonomy(environmentId);
+
+  const { variants, loadingState: variantsLoadingState } = useExistingVariants(
+    environmentId,
+    languageId,
+    itemId,
+    data
+  );
+
+  const { language } = useLanguage(
+    environmentId,
     languageId
   );
 
@@ -103,26 +112,8 @@ export const PersonalizationPanel = ({
     );
   }
 
-  if (data.isVariant) {
-    return (
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>Personalization</h1>
-        </div>
-        <div className={styles.card}>
-          <div className={styles.cardHeader}>
-            <span className={styles.cardTitle}>Current Item</span>
-            <StatusBadge variant="variant">Variant</StatusBadge>
-          </div>
-          <p className={styles.itemName}>{data.item.name}</p>
-          <p className={styles.itemType}>Type: {data.contentType.name}</p>
-        </div>
-        <div style={{ marginTop: "var(--spacing-xl)" }}>
-          <VariantNotice />
-        </div>
-      </div>
-    );
-  }
+  const isVariantsLoading =
+    variantsLoadingState === "loading" || variantsLoadingState === "idle";
 
   return (
     <div className={styles.container}>
@@ -132,11 +123,20 @@ export const PersonalizationPanel = ({
       <div className={styles.card}>
         <div className={styles.cardHeader}>
           <span className={styles.cardTitle}>Current Item</span>
-          <StatusBadge variant="base">Base Content</StatusBadge>
+          <StatusBadge variant={data.isVariant ? "variant" : "base"}>
+            {data.isVariant ? "Variant" : "Base Content"}
+          </StatusBadge>
         </div>
         <p className={styles.itemName}>{data.item.name}</p>
         <p className={styles.itemType}>Type: {data.contentType.name}</p>
       </div>
+      <VariantList
+        variants={variants}
+        audienceTermMap={audienceTermMap}
+        environmentId={environmentId}
+        language={language}
+        isLoading={isVariantsLoading}
+      />
     </div>
   );
 };
