@@ -1,0 +1,24 @@
+[build]
+  command = "pnpm build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+[dev]
+  command = "pnpm dev:vite"
+  targetPort = 5173
+  autoLaunch = false
+
+[dev.https]
+  certFile = "localhost.pem"
+  keyFile = "localhost-key.pem"
+
+[functions]
+  node_bundler = "esbuild"
+  directory = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Headers = "Content-Type"
+    Access-Control-Allow-Methods = "GET, POST, DELETE, OPTIONS"

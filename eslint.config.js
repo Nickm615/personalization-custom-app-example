@@ -3,8 +3,8 @@ import { defineConfig } from "eslint/config";
 
 export default defineConfig([
   {
-    files: ["**/*.{ts,tsx}"],
-    ignores: ["dist", "eslint.config.js", "vite.config.ts", "src/vite-env.d.ts"],
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["dist", "src/vite-env.d.ts"],
     extends: [kontentAiReactConfig],
     languageOptions: {
       parserOptions: {
@@ -13,6 +13,18 @@ export default defineConfig([
     },
     rules: {
       "react/jsx-max-props-per-line": "off",
+      "@typescript-eslint/strict-boolean-expressions": "off",
+    },
+  },
+  {
+    files: ["netlify/functions/**/*.ts"],
+    extends: [kontentAiReactConfig],
+    languageOptions: {
+      parserOptions: {
+        project: "./netlify/functions/tsconfig.json",
+      },
+    },
+    rules: {
       "@typescript-eslint/strict-boolean-expressions": "off",
     },
   },

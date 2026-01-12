@@ -53,3 +53,7 @@ Desktop.ini
 *.tmp
 *.temp
 .cache
+deno.lock
+
+# Netlify
+.netlify

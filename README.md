@@ -19,7 +19,19 @@ Start the development server:
 pnpm dev
 ```
 
-The app will be available at `https://localhost:5173`. The dev server uses a self-signed certificate for HTTPS, which is required for custom apps. Your browser will show a security warning on first access - this is expected for local development.
+The app will be available at `https://localhost:8888`. HTTPS is required for custom apps to work within Kontent.ai.
+
+#### Local SSL Certificates
+
+The repository includes `localhost.pem` and `localhost-key.pem` files for local HTTPS development. **These certificates are for local development only** and should not be used in production. They are committed to the repository to simplify the setup process for new developers.
+
+To regenerate the certificates (optional):
+
+```bash
+openssl req -x509 -newkey rsa:2048 -keyout localhost-key.pem -out localhost.pem -days 365 -nodes -subj "/CN=localhost"
+```
+
+Your browser will show a security warning on first access - this is expected for local development with self-signed certificates.
 
 ### Build
 

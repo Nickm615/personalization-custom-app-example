@@ -1,0 +1,69 @@
+import type {
+  ContentItemModels,
+  ContentTypeModels,
+  ContentTypeSnippetModels,
+  LanguageVariantModels,
+  TaxonomyModels,
+} from "@kontent-ai/management-sdk";
+
+interface ApiResponse<T> {
+  readonly data?: T;
+  readonly error?: string;
+}
+
+const callFunction = async <T>(
+  functionName: string,
+  body: Record<string, unknown>
+): Promise<ApiResponse<T>> => {
+  try {
+    const response = await fetch(`/.netlify/functions/${functionName}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+
+    const result = await response.json() as ApiResponse<T>;
+
+    if (!response.ok) {
+      return { error: result.error ?? "Unknown error" };
+    }
+
+    return { data: result.data };
+  } catch (error) {
+    return {
+      error: error instanceof Error ? error.message : "Network error",
+    };
+  }
+};
+
+export const fetchItem = async (
+  environmentId: string,
+  itemId: string
+): Promise<ApiResponse<ContentItemModels.ContentItem>> =>
+  callFunction("fetch-item", { environmentId, itemId });
+
+export const fetchVariant = async (
+  environmentId: string,
+  itemId: string,
+  languageId: string
+): Promise<ApiResponse<LanguageVariantModels.ContentItemLanguageVariant>> =>
+  callFunction("fetch-variant", { environmentId, itemId, languageId });
+
+export interface ContentTypeWithSnippets {
+  readonly contentType: ContentTypeModels.ContentType;
+  readonly snippets: ReadonlyArray<ContentTypeSnippetModels.ContentTypeSnippet>;
+}
+
+export const fetchContentType = async (
+  environmentId: string,
+  typeId: string
+): Promise<ApiResponse<ContentTypeWithSnippets>> =>
+  callFunction("fetch-content-type", { environmentId, typeId });
+
+export const fetchTaxonomy = async (
+  environmentId: string,
+  codename: string
+): Promise<ApiResponse<TaxonomyModels.Taxonomy>> =>
+  callFunction("fetch-taxonomy", { environmentId, codename });
