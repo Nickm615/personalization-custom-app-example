@@ -1,0 +1,88 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-xl);
+}
+
+.message {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.dismissButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.dismissButton:hover {
+  opacity: 1;
+}
+
+.dismissIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Variants */
+.success {
+  background-color: var(--color-success-bg);
+  border: 1px solid var(--color-success);
+}
+
+.success .message {
+  color: var(--color-success-text);
+}
+
+.success .dismissButton {
+  color: var(--color-success-text);
+}
+
+.error {
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+}
+
+.error .message {
+  color: var(--color-error-text);
+}
+
+.error .dismissButton {
+  color: var(--color-error-text);
+}
+
+.warning {
+  background-color: var(--color-warning-bg);
+  border: 1px solid var(--color-warning);
+}
+
+.warning .message {
+  color: var(--color-warning-text);
+}
+
+.warning .dismissButton {
+  color: var(--color-warning-text);
+}
+
+.info {
+  background-color: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border);
+}
+
+.info .message {
+  color: var(--color-text-secondary);
+}
+
+.info .dismissButton {
+  color: var(--color-text-secondary);
+}

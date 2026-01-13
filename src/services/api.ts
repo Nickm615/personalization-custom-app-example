@@ -74,3 +74,38 @@ export const fetchLanguage = async (
   languageId: string
 ): Promise<ApiResponse<LanguageModels.LanguageModel>> =>
   callFunction("fetch-language", { environmentId, languageId });
+
+export interface CreateVariantParams {
+  readonly environmentId: string;
+  readonly sourceItemId: string;
+  readonly languageId: string;
+  readonly audienceTermId: string;
+  readonly audienceName: string;
+  readonly variantTermId: string;
+  readonly variantTypeElementId: string;
+  readonly audienceElementId: string;
+}
+
+export interface CreateVariantResponse {
+  readonly itemId: string;
+  readonly itemName: string;
+}
+
+export const createVariant = async (
+  params: CreateVariantParams
+): Promise<ApiResponse<CreateVariantResponse>> =>
+  callFunction("create-variant", { ...params });
+
+export interface UpdateContentVariantsParams {
+  readonly environmentId: string;
+  readonly baseItemId: string;
+  readonly languageId: string;
+  readonly contentVariantsElementId: string;
+  readonly variantItemId: string;
+  readonly operation: "add" | "remove";
+}
+
+export const updateContentVariants = async (
+  params: UpdateContentVariantsParams
+): Promise<ApiResponse<{ success: boolean }>> =>
+  callFunction("update-content-variants", { ...params });

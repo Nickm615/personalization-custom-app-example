@@ -1,10 +1,14 @@
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary";
 import { useAudienceTaxonomy } from "../../hooks/useAudienceTaxonomy";
+import { useCreateVariant } from "../../hooks/useCreateVariant";
 import { useCurrentItem } from "../../hooks/useCurrentItem";
 import { useExistingVariants } from "../../hooks/useExistingVariants";
 import { useLanguage } from "../../hooks/useLanguage";
+import { useVariantTermId } from "../../hooks/useVariantTermId";
+import { AudienceSelector } from "../AudienceSelector/AudienceSelector";
 import { StatusBadge } from "../StatusBadge/StatusBadge";
+import { StatusMessage } from "../StatusMessage/StatusMessage";
 import { VariantList } from "../VariantList/VariantList";
 import styles from "./PersonalizationPanel.module.css";
 
@@ -74,7 +78,8 @@ const PersonalizationPanelContent = ({
   languageId,
 }: PersonalizationPanelContentProps) => {
   const { data } = useCurrentItem(environmentId, itemId, languageId);
-  const { termMap: audienceTermMap } = useAudienceTaxonomy(environmentId);
+  const { terms: audienceTerms, termMap: audienceTermMap } =
+    useAudienceTaxonomy(environmentId);
   const { variants } = useExistingVariants(
     environmentId,
     languageId,
@@ -82,6 +87,35 @@ const PersonalizationPanelContent = ({
     data
   );
   const { language } = useLanguage(environmentId, languageId);
+  const { variantTermId } = useVariantTermId(environmentId);
+
+  const isBaseContent = !data.isVariant;
+
+  const { createVariant, isCreating, error, isSuccess, reset } = useCreateVariant(
+    {
+      environmentId,
+      languageId,
+      currentItemData: data,
+      variantTermId,
+      baseItemId: itemId,
+      existingVariants: variants,
+    }
+  );
+
+  const usedAudienceIds = useMemo(
+    () =>
+      new Set(
+        variants
+          .filter((v) => !v.isBaseContent && v.audienceTermId)
+          .map((v) => v.audienceTermId as string)
+      ),
+    [variants]
+  );
+
+  const handleCreateVariant = (audienceId: string, audienceName: string) => {
+    reset();
+    createVariant({ audienceTermId: audienceId, audienceName });
+  };
 
   if (!data.hasSnippet) {
     return <NoSnippetState />;
@@ -92,6 +126,19 @@ const PersonalizationPanelContent = ({
       <div className={styles.header}>
         <h1 className={styles.title}>Personalization</h1>
       </div>
+
+      {isSuccess && (
+        <StatusMessage variant="success" onDismiss={reset}>
+          Variant created successfully!
+        </StatusMessage>
+      )}
+
+      {error && (
+        <StatusMessage variant="error" onDismiss={reset}>
+          {error}
+        </StatusMessage>
+      )}
+
       <div className={styles.card}>
         <div className={styles.cardHeader}>
           <span className={styles.cardTitle}>Current Item</span>
@@ -102,12 +149,22 @@ const PersonalizationPanelContent = ({
         <p className={styles.itemName}>{data.item.name}</p>
         <p className={styles.itemType}>Type: {data.contentType.name}</p>
       </div>
+
       <VariantList
         variants={variants}
         audienceTermMap={audienceTermMap}
         environmentId={environmentId}
         language={language}
       />
+
+      {isBaseContent && (
+        <AudienceSelector
+          audiences={audienceTerms}
+          usedAudienceIds={usedAudienceIds}
+          onCreateVariant={handleCreateVariant}
+          isCreating={isCreating}
+        />
+      )}
     </>
   );
 };
