@@ -1,15 +1,7 @@
 import type { Context } from "@netlify/functions";
+import { updateContentVariantsRequestSchema } from "../../shared/schemas/update-content-variants.schema.ts";
 import { updateContentVariantsElement } from "./shared/element-utils.ts";
 import { errorResponse, getManagementClient, jsonResponse, tryCreateNewVersion } from "./shared/management-client.ts";
-
-interface UpdateContentVariantsRequest {
-  readonly environmentId: string;
-  readonly baseItemId: string;
-  readonly languageId: string;
-  readonly contentVariantsElementId: string;
-  readonly variantItemId: string;
-  readonly operation: "add" | "remove";
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -21,7 +13,10 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as UpdateContentVariantsRequest;
+    const parseResult = updateContentVariantsRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
+    }
     const {
       environmentId,
       baseItemId,
@@ -29,22 +24,7 @@ export default async (request: Request, _context: Context) => {
       contentVariantsElementId,
       variantItemId,
       operation,
-    } = body;
-
-    if (
-      !environmentId ||
-      !baseItemId ||
-      !languageId ||
-      !contentVariantsElementId ||
-      !variantItemId ||
-      !operation
-    ) {
-      return errorResponse("Missing required fields", 400);
-    }
-
-    if (operation !== "add" && operation !== "remove") {
-      return errorResponse("Invalid operation. Must be 'add' or 'remove'", 400);
-    }
+    } = parseResult.data;
 
     const client = getManagementClient(environmentId);
 

@@ -6,6 +6,11 @@ import type {
   LanguageVariantModels,
   TaxonomyModels,
 } from "@kontent-ai/management-sdk";
+import type {
+  CreateVariantRequest,
+  CreateVariantResponse,
+} from "../../shared/schemas/create-variant.schema.ts";
+import type { UpdateContentVariantsRequest } from "../../shared/schemas/update-content-variants.schema.ts";
 
 interface ApiResponse<T> {
   readonly data?: T;
@@ -75,38 +80,12 @@ export const fetchLanguage = async (
 ): Promise<ApiResponse<LanguageModels.LanguageModel>> =>
   callFunction("fetch-language", { environmentId, languageId });
 
-export interface CreateVariantParams {
-  readonly environmentId: string;
-  readonly sourceItemId: string;
-  readonly languageId: string;
-  readonly audienceTermId: string;
-  readonly audienceName: string;
-  readonly variantTermId: string;
-  readonly variantTypeElementId: string;
-  readonly audienceElementId: string;
-  readonly contentVariantsElementId: string;
-}
-
-export interface CreateVariantResponse {
-  readonly itemId: string;
-  readonly itemName: string;
-}
-
 export const createVariant = async (
-  params: CreateVariantParams,
+  params: CreateVariantRequest,
 ): Promise<ApiResponse<CreateVariantResponse>> => callFunction("create-variant", { ...params });
 
-export interface UpdateContentVariantsParams {
-  readonly environmentId: string;
-  readonly baseItemId: string;
-  readonly languageId: string;
-  readonly contentVariantsElementId: string;
-  readonly variantItemId: string;
-  readonly operation: "add" | "remove";
-}
-
 export const updateContentVariants = async (
-  params: UpdateContentVariantsParams,
+  params: UpdateContentVariantsRequest,
 ): Promise<ApiResponse<{ success: boolean }>> =>
   callFunction("update-content-variants", { ...params });
 

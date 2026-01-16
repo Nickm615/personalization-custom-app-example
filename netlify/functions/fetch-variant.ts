@@ -1,11 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { fetchVariantRequestSchema } from "../../shared/schemas/fetch-variant.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface FetchVariantRequest {
-  readonly environmentId: string;
-  readonly itemId: string;
-  readonly languageId: string;
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -17,12 +12,11 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as FetchVariantRequest;
-    const { environmentId, itemId, languageId } = body;
-
-    if (!environmentId || !itemId || !languageId) {
-      return errorResponse("Missing environmentId, itemId, or languageId", 400);
+    const parseResult = fetchVariantRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId, itemId, languageId } = parseResult.data;
 
     const client = getManagementClient(environmentId);
     const response = await client

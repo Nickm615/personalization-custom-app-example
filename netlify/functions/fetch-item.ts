@@ -1,10 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { fetchItemRequestSchema } from "../../shared/schemas/fetch-item.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface FetchItemRequest {
-  readonly environmentId: string;
-  readonly itemId: string;
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -16,12 +12,11 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as FetchItemRequest;
-    const { environmentId, itemId } = body;
-
-    if (!environmentId || !itemId) {
-      return errorResponse("Missing environmentId or itemId", 400);
+    const parseResult = fetchItemRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId, itemId } = parseResult.data;
 
     const client = getManagementClient(environmentId);
     const response = await client.viewContentItem().byItemId(itemId).toPromise();

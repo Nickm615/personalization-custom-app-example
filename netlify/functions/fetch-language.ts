@@ -1,10 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { fetchLanguageRequestSchema } from "../../shared/schemas/fetch-language.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface FetchLanguageRequest {
-  readonly environmentId: string;
-  readonly languageId: string;
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -16,12 +12,11 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as FetchLanguageRequest;
-    const { environmentId, languageId } = body;
-
-    if (!environmentId || !languageId) {
-      return errorResponse("Missing environmentId or languageId", 400);
+    const parseResult = fetchLanguageRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId, languageId } = parseResult.data;
 
     const client = getManagementClient(environmentId);
     const response = await client.viewLanguage().byLanguageId(languageId).toPromise();

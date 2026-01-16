@@ -1,11 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { deleteItemRequestSchema } from "../../shared/schemas/delete-item.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse, tryCreateNewVersion } from "./shared/management-client.ts";
-
-interface DeleteItemRequest {
-  readonly environmentId: string;
-  readonly itemId: string;
-  readonly languageId: string;
-}
 
 const tryCancelScheduledPublishing = async (
   client: ReturnType<typeof getManagementClient>,
@@ -41,12 +36,11 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as DeleteItemRequest;
-    const { environmentId, itemId, languageId } = body;
-
-    if (!environmentId || !itemId || !languageId) {
-      return errorResponse("Missing environmentId, itemId, or languageId", 400);
+    const parseResult = deleteItemRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId, itemId, languageId } = parseResult.data;
 
     const client = getManagementClient(environmentId);
 

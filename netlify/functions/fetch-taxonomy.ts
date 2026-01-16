@@ -1,10 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { fetchTaxonomyRequestSchema } from "../../shared/schemas/fetch-taxonomy.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface FetchTaxonomyRequest {
-  readonly environmentId: string;
-  readonly codename: string;
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -18,13 +14,12 @@ export default async (request: Request, _context: Context) => {
   let codename = "unknown";
 
   try {
-    const body = (await request.json()) as FetchTaxonomyRequest;
-    const { environmentId } = body;
-    codename = body.codename;
-
-    if (!environmentId || !codename) {
-      return errorResponse("Missing environmentId or codename", 400);
+    const parseResult = fetchTaxonomyRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId } = parseResult.data;
+    codename = parseResult.data.codename;
 
     const client = getManagementClient(environmentId);
     const response = await client.getTaxonomy().byTaxonomyCodename(codename).toPromise();

@@ -1,10 +1,6 @@
 import type { Context } from "@netlify/functions";
+import { fetchContentTypeRequestSchema } from "../../shared/schemas/fetch-content-type.schema.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface FetchContentTypeRequest {
-  readonly environmentId: string;
-  readonly typeId: string;
-}
 
 export default async (request: Request, _context: Context) => {
   if (request.method === "OPTIONS") {
@@ -16,12 +12,11 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as FetchContentTypeRequest;
-    const { environmentId, typeId } = body;
-
-    if (!environmentId || !typeId) {
-      return errorResponse("Missing environmentId or typeId", 400);
+    const parseResult = fetchContentTypeRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
     }
+    const { environmentId, typeId } = parseResult.data;
 
     const client = getManagementClient(environmentId);
     const response = await client.viewContentType().byTypeId(typeId).toPromise();

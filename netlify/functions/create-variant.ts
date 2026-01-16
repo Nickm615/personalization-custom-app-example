@@ -1,24 +1,8 @@
 import type { ElementContracts } from "@kontent-ai/management-sdk";
 import type { Context } from "@netlify/functions";
+import { createVariantRequestSchema, type CreateVariantResponse } from "../../shared/schemas/create-variant.schema.ts";
 import { updateContentVariantsElement } from "./shared/element-utils.ts";
 import { errorResponse, getManagementClient, jsonResponse } from "./shared/management-client.ts";
-
-interface CreateVariantRequest {
-  readonly environmentId: string;
-  readonly sourceItemId: string;
-  readonly languageId: string;
-  readonly audienceTermId: string;
-  readonly audienceName: string;
-  readonly variantTermId: string;
-  readonly variantTypeElementId: string;
-  readonly audienceElementId: string;
-  readonly contentVariantsElementId: string;
-}
-
-interface CreateVariantResponse {
-  readonly itemId: string;
-  readonly itemName: string;
-}
 
 const buildVariantElements = (
   sourceElements: ReadonlyArray<ElementContracts.IContentItemElementContract>,
@@ -53,7 +37,10 @@ export default async (request: Request, _context: Context) => {
   }
 
   try {
-    const body = (await request.json()) as CreateVariantRequest;
+    const parseResult = createVariantRequestSchema.safeParse(await request.json());
+    if (!parseResult.success) {
+      return errorResponse(parseResult.error.message, 400);
+    }
     const {
       environmentId,
       sourceItemId,
@@ -64,21 +51,7 @@ export default async (request: Request, _context: Context) => {
       variantTypeElementId,
       audienceElementId,
       contentVariantsElementId,
-    } = body;
-
-    if (
-      !environmentId ||
-      !sourceItemId ||
-      !languageId ||
-      !audienceTermId ||
-      !audienceName ||
-      !variantTermId ||
-      !variantTypeElementId ||
-      !audienceElementId ||
-      !contentVariantsElementId
-    ) {
-      return errorResponse("Missing required fields", 400);
-    }
+    } = parseResult.data;
 
     const client = getManagementClient(environmentId);
 
