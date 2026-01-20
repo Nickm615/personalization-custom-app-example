@@ -18,14 +18,20 @@ const variantStyles: Record<StatusVariant, string> = {
 export const StatusMessage = ({ variant, children, onDismiss }: StatusMessageProps) => (
   <div className={`${styles.container} ${variantStyles[variant]}`}>
     <span className={styles.message}>{children}</span>
-    {onDismiss && (
+    {!!onDismiss && (
       <button
         type="button"
         className={styles.dismissButton}
         onClick={onDismiss}
         aria-label="Dismiss message"
       >
-        <svg className={styles.dismissIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className={styles.dismissIcon}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-hidden="true"
+        >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"

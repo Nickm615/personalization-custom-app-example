@@ -29,7 +29,7 @@ export const AudienceSelector: FC = () => {
 
   return (
     <div className={styles.container} ref={containerRef}>
-      {isOpen && (
+      {!!isOpen && (
         <div className={styles.popup}>
           <h3 className={styles.popupTitle}>Preview as Audience</h3>
           <div className={styles.optionsList}>
@@ -68,6 +68,7 @@ export const AudienceSelector: FC = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
           <circle cx="9" cy="7" r="4" />
@@ -85,6 +86,7 @@ export const AudienceSelector: FC = () => {
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
+          aria-hidden="true"
         >
           <polyline points="6 9 12 15 18 9" />
         </svg>

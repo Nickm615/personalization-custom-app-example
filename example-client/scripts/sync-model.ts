@@ -36,11 +36,17 @@ const main = async (): Promise<void> => {
   };
 
   console.log("Syncing snippets:");
-  [...SNIPPET_CODENAMES].forEach((name) => console.log(`  - ${name}`));
+  [...SNIPPET_CODENAMES].forEach((name) => {
+    console.log(`  - ${name}`);
+  });
   console.log("Syncing taxonomies:");
-  [...TAXONOMY_CODENAMES].forEach((name) => console.log(`  - ${name}`));
+  [...TAXONOMY_CODENAMES].forEach((name) => {
+    console.log(`  - ${name}`);
+  });
   console.log("Syncing content types:");
-  [...CONTENT_TYPE_CODENAMES].forEach((name) => console.log(`  - ${name}`));
+  [...CONTENT_TYPE_CODENAMES].forEach((name) => {
+    console.log(`  - ${name}`);
+  });
   console.log("");
 
   await syncRun({

@@ -31,7 +31,13 @@ const LoadingState = () => (
 
 const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => (
   <div className={styles.errorContainer}>
-    <svg className={styles.errorIcon} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={styles.errorIcon}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -163,25 +169,25 @@ const PersonalizationPanelContent = ({
         <h1 className={styles.title}>Personalization</h1>
       </div>
 
-      {createSuccess && (
+      {!!createSuccess && (
         <StatusMessage variant="success" onDismiss={resetCreate}>
           Variant created successfully!
         </StatusMessage>
       )}
 
-      {deleteSuccess && (
+      {!!deleteSuccess && (
         <StatusMessage variant="success" onDismiss={resetDelete}>
           Variant deleted successfully!
         </StatusMessage>
       )}
 
-      {createError && (
+      {!!createError && (
         <StatusMessage variant="error" onDismiss={resetCreate}>
           {createError}
         </StatusMessage>
       )}
 
-      {deleteError && (
+      {!!deleteError && (
         <StatusMessage variant="error" onDismiss={resetDelete}>
           {deleteError}
         </StatusMessage>
@@ -214,7 +220,7 @@ const PersonalizationPanelContent = ({
         isCreating={isCreating}
       />
 
-      {variantToDelete && (
+      {!!variantToDelete && (
         <ConfirmDeleteModal
           variantName={variantToDelete.name}
           audienceName={

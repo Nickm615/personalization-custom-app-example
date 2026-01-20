@@ -23,7 +23,7 @@ export const PersonalizedHero: FC<PersonalizedHeroProps> = ({ baseItem }) => {
       </div>
       <h1 className={styles.headline}>{resolvedItem.elements.headline.value}</h1>
       <p className={styles.subheadline}>{resolvedItem.elements.subheadline.value}</p>
-      {resolvedItem.elements.cta_text.value && (
+      {!!resolvedItem.elements.cta_text.value && (
         <a href={resolvedItem.elements.cta_url.value} className={styles.cta}>
           {resolvedItem.elements.cta_text.value}
         </a>
