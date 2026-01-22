@@ -5,9 +5,9 @@ import { type SyncEntities, syncRun } from "@kontent-ai/data-ops";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const TAXONOMY_CODENAMES = new Set(["variant_type", "personalization_audiences"]);
-const CONTENT_TYPE_CODENAMES = new Set(["hero_section", "landing_page"]);
-const SNIPPET_CODENAMES = new Set(["personalization"]);
+const TAXONOMY_CODENAMES = ["variant_type", "personalization_audiences"] as const;
+const CONTENT_TYPE_CODENAMES = ["hero_section", "landing_page"] as const;
+const SNIPPET_CODENAMES = ["personalization"] as const;
 
 const getEnvVar = (name: string): string => {
   const value = process.env[name];
@@ -30,21 +30,21 @@ const main = async (): Promise<void> => {
   console.log(`Target environment: ${environmentId}\n`);
 
   const entities: SyncEntities = {
-    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.has(taxonomy.codename),
-    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.has(snippet.codename),
-    contentTypes: (contentType) => CONTENT_TYPE_CODENAMES.has(contentType.codename),
+    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.includes(taxonomy.codename as typeof TAXONOMY_CODENAMES[number]),
+    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.includes(snippet.codename as typeof SNIPPET_CODENAMES[number]),
+    contentTypes: (contentType) => CONTENT_TYPE_CODENAMES.includes(contentType.codename as typeof CONTENT_TYPE_CODENAMES[number]),
   };
 
   console.log("Syncing snippets:");
-  [...SNIPPET_CODENAMES].forEach((name) => {
+  SNIPPET_CODENAMES.forEach((name) => {
     console.log(`  - ${name}`);
   });
   console.log("Syncing taxonomies:");
-  [...TAXONOMY_CODENAMES].forEach((name) => {
+  TAXONOMY_CODENAMES.forEach((name) => {
     console.log(`  - ${name}`);
   });
   console.log("Syncing content types:");
-  [...CONTENT_TYPE_CODENAMES].forEach((name) => {
+  CONTENT_TYPE_CODENAMES.forEach((name) => {
     console.log(`  - ${name}`);
   });
   console.log("");

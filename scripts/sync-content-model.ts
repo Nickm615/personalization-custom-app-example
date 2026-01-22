@@ -2,8 +2,8 @@ import * as path from "node:path";
 import { type SyncEntities, syncRun } from "@kontent-ai/data-ops";
 
 // Codenames of entities we want to sync
-const TAXONOMY_CODENAMES = new Set(["variant_type", "personalization_audiences"]);
-const SNIPPET_CODENAMES = new Set(["personalization"]);
+const TAXONOMY_CODENAMES = ["variant_type", "personalization_audiences"] as const;
+const SNIPPET_CODENAMES = ["personalization"] as const;
 
 const getEnvVar = (name: string): string => {
   const value = process.env[name];
@@ -26,14 +26,14 @@ const main = async (): Promise<void> => {
   // Define filter functions to only sync our specific entities
   // This prevents deletion of user's existing taxonomies and snippets
   const entities: SyncEntities = {
-    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.has(taxonomy.codename),
-    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.has(snippet.codename),
+    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.includes(taxonomy.codename as typeof TAXONOMY_CODENAMES[number]),
+    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.includes(snippet.codename as typeof SNIPPET_CODENAMES[number]),
   };
 
   console.log("Syncing taxonomies:");
-  console.log(`  - ${Array.from(TAXONOMY_CODENAMES).join(", ")}`);
+  console.log(`  - ${TAXONOMY_CODENAMES.join(", ")}`);
   console.log("Syncing snippets:");
-  console.log(`  - ${Array.from(SNIPPET_CODENAMES).join(", ")}\n`);
+  console.log(`  - ${SNIPPET_CODENAMES.join(", ")}\n`);
 
   await syncRun({
     targetEnvironmentId: environmentId,
