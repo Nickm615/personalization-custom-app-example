@@ -1,5 +1,5 @@
 {
-  "name": "personalization-custom-app",
+  "name": "@kontent-ai/personalization-custom-app",
   "version": "1.0.0",
   "type": "module",
   "scripts": {
