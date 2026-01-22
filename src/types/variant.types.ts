@@ -24,5 +24,5 @@ export interface VariantInfo {
 
 export interface VariantsData {
   readonly editedVariant: VariantInfo;
-  readonly otherVariants: readonly VariantInfo[];
+  readonly linkedVariants: readonly VariantInfo[];
 }

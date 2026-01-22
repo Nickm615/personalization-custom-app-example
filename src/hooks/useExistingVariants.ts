@@ -100,7 +100,7 @@ export const extractAudienceTermId = (
   return parsed.data[0]?.id ?? null;
 };
 
-const fetchOtherVariantsData = async (
+const fetchLinkedVariantsData = async (
   environmentId: string,
   languageId: string,
   currentItemId: string,
@@ -185,10 +185,10 @@ export const useExistingVariants = (
   currentItemId: string,
   currentItemData: CurrentItemData,
 ): { variantsData: VariantsData } => {
-  const { data: otherVariants } = useSuspenseQuery({
+  const { data: linkedVariants } = useSuspenseQuery({
     queryKey: queryKeys.existingVariants(environmentId, currentItemId, languageId),
     queryFn: async () =>
-      fetchOtherVariantsData(environmentId, languageId, currentItemId, currentItemData),
+      fetchLinkedVariantsData(environmentId, languageId, currentItemId, currentItemData),
   });
 
   const editedVariant: VariantInfo = {
@@ -204,7 +204,7 @@ export const useExistingVariants = (
   return {
     variantsData: {
       editedVariant,
-      otherVariants,
+      linkedVariants,
     },
   };
 };

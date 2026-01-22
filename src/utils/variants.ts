@@ -2,7 +2,7 @@ import type { VariantInfo, VariantsData } from "../types/variant.types.ts";
 
 export const allVariants = (variants: VariantsData): readonly VariantInfo[] => [
   variants.editedVariant,
-  ...variants.otherVariants,
+  ...variants.linkedVariants,
 ];
 
 export const extractUsedAudienceIds = (variants: VariantsData): ReadonlySet<string> =>

@@ -134,7 +134,7 @@ const PersonalizationPanelContent = ({
   };
 
   const handleDeleteClick = (variantId: string) => {
-    const variant = variantsData.otherVariants.find((v) => v.id === variantId);
+    const variant = variantsData.linkedVariants.find((v) => v.id === variantId);
     if (variant) {
       setVariantToDelete(variant);
     }
@@ -205,7 +205,7 @@ const PersonalizationPanelContent = ({
       </div>
 
       <VariantList
-        variants={variantsData.otherVariants}
+        variants={variantsData.linkedVariants}
         audienceTermMap={audienceTermMap}
         environmentId={environmentId}
         language={language}
