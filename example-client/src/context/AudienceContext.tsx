@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import type { AudienceCodename } from "../types/content.ts";
@@ -61,8 +62,13 @@ export const AudienceProvider: FC<AudienceProviderProps> = ({ children }) => {
     setCurrentAudience(audience);
   }, []);
 
+  const contextValue = useMemo(
+    () => ({ currentAudience, setAudience }),
+    [currentAudience, setAudience],
+  );
+
   return (
-    <AudienceContext.Provider value={{ currentAudience, setAudience }}>
+    <AudienceContext.Provider value={contextValue}>
       {children}
     </AudienceContext.Provider>
   );
