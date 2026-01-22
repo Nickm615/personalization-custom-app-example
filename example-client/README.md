@@ -65,32 +65,6 @@ In this example, audience selection is manual via a UI selector for demonstratio
 
 The `useAudience` hook in `src/context/AudienceContext.tsx` provides the current audience to components.
 
-## Project Structure
-
-```
-example-client/
-├── src/
-│   ├── components/
-│   │   ├── AudienceSelector.tsx    # UI for manual audience selection
-│   │   └── PersonalizedHero.tsx    # Example personalized component
-│   ├── context/
-│   │   └── AudienceContext.tsx     # Audience state management
-│   ├── hooks/
-│   │   └── usePersonalizedContent.ts # Content fetching hook
-│   ├── lib/
-│   │   ├── kontentClient.ts        # Kontent.ai Delivery SDK setup
-│   │   └── variantResolver.ts      # Variant resolution logic
-│   ├── types/
-│   │   └── content.ts              # TypeScript types for content
-│   └── App.tsx                     # Main application
-├── scripts/
-│   ├── sync-model.ts               # Syncs content model to Kontent.ai
-│   └── sync-content.ts             # Imports example content items
-└── kontent-ai-data/
-    ├── contentItems.json           # Example content with variants
-    └── contentTypes.json           # Content type definitions
-```
-
 ## Running the Example
 
 ### Prerequisites
@@ -114,17 +88,12 @@ example-client/
    cp .env.template .env
    ```
 
-   Edit `.env` with your Kontent.ai credentials:
-
-   ```env
-   VITE_KONTENT_ENVIRONMENT_ID=your_environment_id
-   VITE_KONTENT_PREVIEW_API_KEY=your_preview_api_key
-   KONTENT_MANAGEMENT_API_KEY=your_management_api_key
-   ```
+   See `.env.template` for the required environment variables.
 
 3. **Sync content model and example content**
 
-   > **Warning**: Run this on an empty or test environment only. The sync scripts will create content types and items that may conflict with existing content.
+   > [!WARNING]
+   > Run this on an empty or test environment only. The sync scripts will create content types and items that may conflict with existing content.
 
    ```bash
    pnpm sync:all
@@ -184,17 +153,6 @@ const PersonalizedSection = ({ baseItem }) => {
 ### 4. Handle Multiple Personalized Components
 
 The pattern works for any number of components on a page. Each component independently resolves its variant based on the shared audience context.
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start Vite development server |
-| `pnpm build` | Build for production |
-| `pnpm preview` | Preview production build |
-| `pnpm sync:model` | Sync content types to Kontent.ai |
-| `pnpm sync:content` | Import example content items |
-| `pnpm sync:all` | Run both sync scripts |
 
 ## License
 
