@@ -11,22 +11,18 @@ export const resolveVariant = (
   baseItem: HeroSection,
   currentAudience: AudienceCodename,
 ): HeroSection => {
-  // If no audience selected, return base item
   if (currentAudience === null) {
     return baseItem;
   }
 
-  // Get all variants from the content_variants element
   const variants = baseItem.elements.personalization__content_variants.linkedItems;
 
-  // Find variant matching current audience
   const matchingVariant = variants.find((variant) =>
     variant.elements.personalization__personalization_audience.value.some(
       (term) => term.codename === currentAudience,
     ),
   );
 
-  // Return matching variant or base item as fallback
   return matchingVariant ?? baseItem;
 };
 

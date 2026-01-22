@@ -8,16 +8,9 @@ import {
   useMemo,
   useState,
 } from "react";
-import type { AudienceCodename } from "../types/content.ts";
+import { type AudienceCodename, VALID_AUDIENCES } from "../types/content.ts";
 
 const STORAGE_KEY = "personalization_audience";
-
-const VALID_AUDIENCES = new Set<AudienceCodename>([
-  "new_visitors",
-  "returning_visitors",
-  "premium_members",
-  "enterprise_customers",
-]);
 
 const isValidAudience = (value: string | null): value is AudienceCodename =>
   value === null || VALID_AUDIENCES.has(value as AudienceCodename);

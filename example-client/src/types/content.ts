@@ -20,6 +20,10 @@ export const AUDIENCES: ReadonlyArray<AudienceOption> = [
   { codename: "enterprise_customers", name: "Enterprise Customers" },
 ] as const;
 
+export const VALID_AUDIENCES = new Set<AudienceCodename>(
+  AUDIENCES.map((a) => a.codename),
+);
+
 export interface HeroSectionElements extends IContentItemElements {
   readonly headline: Elements.TextElement;
   readonly subheadline: Elements.TextElement;
