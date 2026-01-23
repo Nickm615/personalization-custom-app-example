@@ -60,11 +60,7 @@ export const AudienceProvider: FC<AudienceProviderProps> = ({ children }) => {
     [currentAudience, setAudience],
   );
 
-  return (
-    <AudienceContext.Provider value={contextValue}>
-      {children}
-    </AudienceContext.Provider>
-  );
+  return <AudienceContext.Provider value={contextValue}>{children}</AudienceContext.Provider>;
 };
 
 /**

@@ -23,14 +23,19 @@ export default async (request: Request, _context: Context) => {
     const response = await client.viewContentType().byTypeId(typeId).toPromise();
 
     const snippetIds = response.data.elements
-      .filter((element): element is { type: "snippet"; snippet: { id: string } } =>
-        element.type === "snippet" && "snippet" in element && element.snippet?.id !== undefined,
+      .filter(
+        (element): element is { type: "snippet"; snippet: { id: string } } =>
+          element.type === "snippet" && "snippet" in element && element.snippet?.id !== undefined,
       )
       .map((element) => element.snippet.id);
 
     const snippets = await Promise.all(
       snippetIds.map(async (snippetId) =>
-        client.viewContentTypeSnippet().byTypeId(snippetId).toPromise().then((res) => res.data),
+        client
+          .viewContentTypeSnippet()
+          .byTypeId(snippetId)
+          .toPromise()
+          .then((res) => res.data),
       ),
     );
 

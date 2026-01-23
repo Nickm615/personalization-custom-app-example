@@ -30,9 +30,14 @@ const main = async (): Promise<void> => {
   console.log(`Target environment: ${environmentId}\n`);
 
   const entities: SyncEntities = {
-    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.includes(taxonomy.codename as typeof TAXONOMY_CODENAMES[number]),
-    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.includes(snippet.codename as typeof SNIPPET_CODENAMES[number]),
-    contentTypes: (contentType) => CONTENT_TYPE_CODENAMES.includes(contentType.codename as typeof CONTENT_TYPE_CODENAMES[number]),
+    taxonomies: (taxonomy) =>
+      TAXONOMY_CODENAMES.includes(taxonomy.codename as (typeof TAXONOMY_CODENAMES)[number]),
+    contentTypeSnippets: (snippet) =>
+      SNIPPET_CODENAMES.includes(snippet.codename as (typeof SNIPPET_CODENAMES)[number]),
+    contentTypes: (contentType) =>
+      CONTENT_TYPE_CODENAMES.includes(
+        contentType.codename as (typeof CONTENT_TYPE_CODENAMES)[number],
+      ),
   };
 
   console.log("Syncing snippets:");

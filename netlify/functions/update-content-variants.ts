@@ -30,7 +30,6 @@ export default async (request: Request, _context: Context) => {
   const client = createManagementClient(environmentId);
 
   try {
-
     const currentVariant = await client
       .viewLanguageVariant()
       .byItemId(baseItemId)

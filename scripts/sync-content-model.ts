@@ -26,8 +26,10 @@ const main = async (): Promise<void> => {
   // Define filter functions to only sync our specific entities
   // This prevents deletion of user's existing taxonomies and snippets
   const entities: SyncEntities = {
-    taxonomies: (taxonomy) => TAXONOMY_CODENAMES.includes(taxonomy.codename as typeof TAXONOMY_CODENAMES[number]),
-    contentTypeSnippets: (snippet) => SNIPPET_CODENAMES.includes(snippet.codename as typeof SNIPPET_CODENAMES[number]),
+    taxonomies: (taxonomy) =>
+      TAXONOMY_CODENAMES.includes(taxonomy.codename as (typeof TAXONOMY_CODENAMES)[number]),
+    contentTypeSnippets: (snippet) =>
+      SNIPPET_CODENAMES.includes(snippet.codename as (typeof SNIPPET_CODENAMES)[number]),
   };
 
   console.log("Syncing taxonomies:");
