@@ -12,16 +12,15 @@ export default async (request: Request, _context: Context) => {
     return errorResponse("Method not allowed", 405);
   }
 
-  let codename = "unknown";
+  const parseResult = fetchTaxonomyRequestSchema.safeParse(await request.json());
+  if (!parseResult.success) {
+    return errorResponse(parseResult.error.message, 400);
+  }
+  const { environmentId } = parseResult.data;
+  const codename = parseResult.data.codename;
+
 
   try {
-    const parseResult = fetchTaxonomyRequestSchema.safeParse(await request.json());
-    if (!parseResult.success) {
-      return errorResponse(parseResult.error.message, 400);
-    }
-    const { environmentId } = parseResult.data;
-    codename = parseResult.data.codename;
-
     const client = createManagementClient(environmentId);
     const response = await client.getTaxonomy().byTaxonomyCodename(codename).toPromise();
 
