@@ -25,7 +25,7 @@ export default async (request: Request, _context: Context) => {
     const snippetIds = response.data.elements
       .filter(
         (element): element is { type: "snippet"; snippet: { id: string } } =>
-          element.type === "snippet" && "snippet" in element && element.snippet?.id !== undefined,
+          element.type === "snippet",
       )
       .map((element) => element.snippet.id);
 
