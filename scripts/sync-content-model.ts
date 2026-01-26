@@ -1,9 +1,14 @@
+import "dotenv/config";
 import * as path from "node:path";
+import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { type SyncEntities, syncRun } from "@kontent-ai/data-ops";
 
 // Codenames of entities we want to sync
 const TAXONOMY_CODENAMES = ["variant_type", "personalization_audiences"] as const;
 const SNIPPET_CODENAMES = ["personalization"] as const;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const getEnvVar = (name: string): string => {
   const value = process.env[name];
@@ -51,7 +56,7 @@ const main = async (): Promise<void> => {
   console.log("3. Add the 'Personalization' snippet to the content type");
 };
 
-main().catch((error) => {
+await main().catch((error) => {
   console.error("Error:", error instanceof Error ? error.message : error);
   process.exit(1);
 });
